@@ -1,0 +1,33 @@
+SELECT PL.name, COUNT(C.id) AS CertCount FROM bsg_planets PL 
+INNER JOIN bsg_people PE ON PE.homeworld = PL.id 
+INNER JOIN  bsg_cert_people CP ON CP.pid = PE.id 
+INNER JOIN bsg_cert C ON C.id = CP.cid 
+GROUP BY PL.name;
+
+Nexus
+
+-----------------------------------------
+
+SELECT bsg_people.fname, bsg_people.lname FROM bsg_people
+INNER JOIN bsg_ship_assignment ON bsg_ship_assignment.pid = bsg_people.id
+INNER JOIN bsg_ship_instance ON bsg_ship_assignment.cid = bsg_ship_instance.class
+INNER JOIN bsg_ship_class ON bsg_ship_class.id = bsg_ship_instance.class
+WHERE bsg_ship_class.name = 'Viper'
+
+glider
+
+----------------------------------------------
+
+SELECT p.fname, p.lname, sk.id FROM bsg_people p 
+INNER JOIN bsg_ship_assignment ps ON ps.pid = p.id
+INNER JOIN bsg_ship_instance sk ON sk.id = ps.sid AND sk.class = ps.cid
+INNER JOIN bsg_ship_class k ON k.id = sk.class
+WHERE p.id NOT IN 
+(
+SELECT cp.pid FROM bsg_cert_people cp 
+INNER JOIN bsg_cert c ON c.id = cp.cid
+WHERE c.title = 'Viper'
+)
+AND k.name = 'Viper'
+
+lamy
